@@ -11,10 +11,27 @@ Chapter 02의 예제보다 더 깊게 잡과 스텝에 대해 이해하기
 
 ### 잡의 생명주기 따라가보기
 
+스프링 배치에서 제공하는 두 가지 잡 러너
+- CommandLineJobRunner : 스프링을 부트스트랩하고 전달받은 파라미터로 잡 실행
+- JobRegistryBackgroundJobRunner : 쿼츠나 JMX 후크와 같은 스케줄러를 사용할 경우  
+스프링이 부트스트랩 될 때 실행 가능한 잡을 가지고 있는 JobRegistry를 생성, 이때 사용되는 JobRunner
+- JobLauncherCommandLineRunner : 별도의 구성이 없을 시 기본적으로 Application Context 내의 모든 Job을  
+기동 시에 실행
+
+배치 실행 시 잡 러너가 사용되긴 하지만 실제 진입점은 JobLauncher의 인터페이스 구현체임에 유의  
+CommandLineJobRunner, JobLauncherCommandLineRunner -> JobLauncher 인터페이스 구현체 사용  
+
+JobLauncher의 도움으로 Job 실행 -> JobInstance 생성(BATCH_JOB_INSTANCE, BATCH_JOB_EXECUTION_PARAMS 메타 테이블로 식별)  
+-> JobExecution, Job 실행 시마다 생성됨(BATCH_JOB_EXECUTION, 상태정보는 BATCH_JOB_EXECUTION_CONTEXT)  
+
 ## 잡 구성하기
+잡을 구성하는 다양한 방법 소개
+
 ### 잡의 기본 구성
+(Chapter 02와 겹치는 내용)
 
 ### 잡 파라미터
+
 #### 잡 파라미터에 접근하기
 #### 잡 파라미터 유효성 검증하기
 #### 잡 파라미터 증가시키기
