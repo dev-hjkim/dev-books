@@ -48,3 +48,6 @@ Job 파라미터가 달라지면 새로운 JobInstance 생성, 잡이 실패해�
 #### 프로젝트 실습
   - 기본 추가 dependency : Batch, H2, JDBC
   - "Hello, World!" 출력하는 간단한 batch job 예제 실습 후 실행
+  - @EnableBatchProcessing : JobRepository, JobLauncher, JobExplorer, JobRegistry,  
+PlatformTransactionManager, JobBuilderFactory, StepBuilderFactory 자동 등록
+  - application 실행 -> JobLauncherCommandLineRunner에 의해 spring에 정의된 모든 Job 실행
