@@ -31,10 +31,38 @@ JobLauncher의 도움으로 Job 실행 -> JobInstance 생성(BATCH_JOB_INSTANCE,
 (Chapter 02와 겹치는 내용)
 
 ### 잡 파라미터
+- 동일한 파라미터로 잡을 두 번 실행하면 JobInstanceAlreadyCompleteException 발생
+- 잡 러너가 JobParameters 객체를 생성해 JobInstance에 전달
+- JobParameters는 Map<String, JobParameter> 객체의 wrapper, 스프링 배치는 파라미터의 타입에 따라 JobParameter의 접근자 제공
+- 타입 지정 방법
+  - ```java -jar demo.jar executionDate(date)=2022/11/22```
+  - 괄호로 명시, 타입 명은 반드시 소문자
+  - string, long, double, date 타입 기본적으로 지원
+- 잡에 전달한 파라미터 확인은 JobRepository의 BATCH_JOB_EXECUTION_PARAMS를 통해 가능
+- 특정 잡 파라미터가 식별에 사용되지 않게 하려면 접두사 "-"를 사용한다.
+  - ```java -jar demo.jar executionDate(date)=2022/11/22 -name=hjkim```
+  - name을 바꿔도 기존의 JobInstance로 새로운 JobExecution을 생성
 
 #### 잡 파라미터에 접근하기
+- ChunkContext
+  - 실행 시점의 잡 상태, 처리중인 chunk 관련 정보 존재
+  - JobParameters를 포함하고 있는 StepContext의 참조 존재
+- ChunkContext를 통해 잡 파라미터에 접근
+  - ```chunkContext.getStepContext().getJobParameters()```
+  - getJobParameters()는 Map<String, Object>를 리턴하므로 Object의 타입캐스팅이 필요
+- 늦은 바인딩으로 잡 파라미터 얻기
+  - ```public Tasklet helloWorldTasklet(@Value("#{jobParameters['name']}") String name)```
+  - @JobScope나 @StepScope 어노테이션을 통해 잡이나 스텝의 실행 범위에 들어갈 때까지 빈 생성을 지연시킴
+
 #### 잡 파라미터 유효성 검증하기
+- JobParametersValidator 인터페이스의 validate 메서드 구현을 통해 유효성 검증
+- DefaultJobParametersValidator는 필수 파라미터가 누락없이 전달되었는지 확인하는 기능 제공
+- 위의 두 개의 유효성 검증기를 모두 사용하려면 CompositeJobParametersValidator 사용해야 함
+
 #### 잡 파라미터 증가시키기
+- 동일한 파라미터로 잡을 두 번 수행하면 에러 발생 -> 피하기 위한 간단한 방법, JobParameterIncrementer
+  - 기본적으로 run.id라는 이름의 long 타입 파라미터의 값을 증가시킴
+- 타임스탬프를 파라미터로 사용하려 할 때 -> JobParametersIncrementer 인터페이스의 getNext 메서드로 구현
 
 ### 잡 리스너 적용하기
 
