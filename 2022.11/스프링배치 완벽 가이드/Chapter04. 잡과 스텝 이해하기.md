@@ -71,9 +71,26 @@ JobLauncher의 도움으로 Job 실행 -> JobInstance 생성(BATCH_JOB_INSTANCE,
 - JobExecutionListener의 구현 없이 @BeforeJob, @AfterJob 어노테이션 제공됨, 이때 래핑 필요
 
 ### ExecutionContext
+- 현재 어떤 스텝이 실행 중인지, 해당 스텝이 몇 개의 레코드까지 처리했는지, 현재 배치는 어떤 상태인지 등을 스프링 배치가 트래킹 해줌
+- 상태를 저장해주는 곳 중 하나인 JobExecution, 잡의 상태를 JobExecution의 ExecutionContext에 저장
+- 웹 애플리케이션에 HttpSession이 있는 것처럼 배치 잡의 세션 역할을 함
+- JobExecution처럼 StepExecution도 존재, 적절한 ExecutionContext로 데이터 사용 범위 조절 가능
+- ExecutionContext의 모든 내용이 JobRepository에 저장되므로 안전함
 
 ### ExecutionContext 조작하기
+- ExecutionContext를 사용하려면 JobExecution 또는 StepExecution에서 가져와야 함
+- 잡의 ExecutionContext 받아오기
+  - ```chunkContext.getStepContext().getStepExecution().getJobExecution().getExecutionContext()```
+  - stepContext()에서 바로 .getJobExecutionContext()로 받아올 수도 있음. -> Map<String, Object>로 리턴됨
+  - 하지만 위에서 리턴된 Map을 수정해도 실제 ExecutonContext에 반영이 되질 않음! 주의!
+- StepExecution의 ExecutionContext에 있는 키를 JobExecution의 ExecutionContext로 승격시키는 것 가능
+  - ExecutionContextPromotionListener가 담당
+  - 스텝이 성공적으로 완료되면 잡의 ExecutionContext에 키를 복사
+- ItemStream 인터페이스를 통해서도 ExecutionContext 접근 가능, 이 내용은 뒷장에서 더 자세히 다룸
+
 #### ExecutionContext 저장하기
+- 잡이 처리되는 동안 스프링 배치는 각 청크를 커밋하며 잡이나 스텝의 현재 ExecutionContext를 데이터베이스에 저장
+- BATCH_JOB_EXECUTION_CONTEXT 테이블의 SERIALIZED_CONTEXT : 잡이 실행 중이거나 실패한 경우에만 채워짐
 
 ## 스텝 알아보기
 
