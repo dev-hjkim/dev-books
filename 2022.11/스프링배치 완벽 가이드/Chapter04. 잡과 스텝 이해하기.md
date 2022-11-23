@@ -65,6 +65,10 @@ JobLauncher의 도움으로 Job 실행 -> JobInstance 생성(BATCH_JOB_INSTANCE,
 - 타임스탬프를 파라미터로 사용하려 할 때 -> JobParametersIncrementer 인터페이스의 getNext 메서드로 구현
 
 ### 잡 리스너 적용하기
+- 잡 실행과 관련있는 실행주기에서 JobExecutionListener 인터페이스의 beforeJob & afterJob 사용하여 로직 추가 가능  
+- 알림, 초기화, 정리(clean up) 등에 사용하기 좋음  
+- afterJob은 Job 실행의 성공여부와 관계없이 항상 실행됨에 유의
+- JobExecutionListener의 구현 없이 @BeforeJob, @AfterJob 어노테이션 제공됨, 이때 래핑 필요
 
 ### ExecutionContext
 
