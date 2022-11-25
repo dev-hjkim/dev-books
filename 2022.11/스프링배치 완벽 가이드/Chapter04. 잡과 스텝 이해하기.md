@@ -93,10 +93,24 @@ JobLauncher의 도움으로 Job 실행 -> JobInstance 생성(BATCH_JOB_INSTANCE,
 - BATCH_JOB_EXECUTION_CONTEXT 테이블의 SERIALIZED_CONTEXT : 잡이 실행 중이거나 실패한 경우에만 채워짐
 
 ## 스텝 알아보기
+- 모든 단위 작업의 조각, 각각 독립적
+- 자체적 입력, 자체적 처리기, 자체적 출력을 처리
 
 ### 테스크릿 처리와 청크 처리 비교
+- Tasklet 모델
+  - execute 메소드가 RepeatStatus.FINISHED를 반환할 때까지 반복적으로 실행
+- Chunk 기반 처리 모델
+  - ItemReader, (ItemProcessor), ItemWriter로 구성
+  - 청크 또는 레코드 그룹 단위로 처리
+  - <img src="/book_image/chunk_based_processing.jpg">
+
 ### 스텝 구성
 #### 테스크릿 스텝
+- 사용자가 작성한 일반 POJO를 스텝으로 활용하는 방법
+  - MethodInvokingTaskletAdapter를 통해 태스크릿 스텝으로 정의
+- Tasklet 인터페이스를 구현하는 방법
+  - execute 메서드가 RepeatStatus.FINISHED 반환할 때까지 실행
+  - RepeatStatus.CONTINUABLE : 해당 태스크릿을 다시 실행하라는 의미(조건 충족될 때까지 실행하게 할 때 사용)
 
 ### 그 밖의 여러 다른 유형의 태스크릿 이해하기
 #### CallableTaskletAdapter
