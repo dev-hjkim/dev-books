@@ -114,8 +114,29 @@ JobLauncher의 도움으로 Job 실행 -> JobInstance 생성(BATCH_JOB_INSTANCE,
 
 ### 그 밖의 여러 다른 유형의 태스크릿 이해하기
 #### CallableTaskletAdapter
+- Callable 인터페이스의 구현체를 구성할 수 있게 해주는 어댑터
+  - Runnable 인터페이스와 비슷하나 값을 반환(RepeatStatus 반환)할 수 있고 체크 예외를 바깥으로 던질 수 있음
+  - call 메서드 사용
+- 해당 스텝이 실행되는 스레드가 아닌 다른 스레드에서 실행하고 싶을 때 사용, but! 스텝과 병렬 실행되진 않음
+
 #### MethodInvokingTaskletAdapter
+- 실행하고 싶은 로직을 어떤 서비스가 이미 갖고 있는 경우, 이를 잡 내의 태스크릿처럼 실행하기 위해 사용
+  - 메서드 호출을 래핑할 뿐인 Tasklet 인터페이스 구현체 만드는 대신 MethodInvokingTaskletAdapter 사용
+- 메서드가 ExistStatus 지정하지 않으면 ExitStatus.COMPLETED
+- 파라미터를 넘기고 싶을 때에는 잡 파라미터 전달할 때와 같이 늦은 바인딩 방법을 사용
+
 #### SystemCommandTasklet
+- 시스템 명령 비동기로 실행 시 사용
+- command : 실행할 시스템 명령(ex. "rm -rf /tmp.txt", "touch tmp.txt")
+- interruptOnCancel : 잡이 비정상적으로 종료될 때 시스템 프로세스 관련 스레드를 강제로 종료할지 여부를 스프링 배치에 알려줌
+- workingDirectory : 명령 실행할 디렉터리
+- systemProcessExitCodeMapper : 시스템 반환 코드를 스프링 배치 상태 값으로 매핑해주는 구현체
+  - ConfigurableSystemProcessExitCodeMapper
+  - SimpleSystemProcessExitCodeMapper
+- terminateCheckInterval : 비동기 방식으로 실행되므로 몇 밀리초 단위로 완료 여부 체크할 지 지정
+- taskExecutor : 시스템 명령을 실행하는 자신만의 고유한 TaskExecutor 구성 가능(동기식으로 구성하지 않을 것, lock 걸림)
+- environmentParams : 명령 실행 전 설정하는 환경 파라미터 목록
+
 #### 청크 기반 스텝
 #### 청크 크기 구성하기
 #### 스텝 리스너
