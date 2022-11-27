@@ -138,10 +138,63 @@ JobLauncher의 도움으로 Job 실행 -> JobInstance 생성(BATCH_JOB_INSTANCE,
 - environmentParams : 명령 실행 전 설정하는 환경 파라미터 목록
 
 #### 청크 기반 스텝
+- 커밋 간격에 의해 정의되는 chunk
+  - 커밋 간격 50 지정 -> 50개 아이템을 읽고, 처리하고, 쓴 후 다음 chunk 읽고, 처리하고, 쓰고... 반복
+  - 49번째 아이템 처리 실패 -> 쓰기 작업 없이 롤백
+
 #### 청크 크기 구성하기
+- 정적인 커밋 개수 설정
+- CompletionPolicy 구현체 사용
+  - SimpleCompletionPolicy : 아이템 개수가 미리 구성해둔 임곗값에 도달하면 청크 완료로 표시
+  - TimeoutTerminationPolicy : 처리 시간이 해당 시간을 넘을 때 청크 완료로 표시
+  - CompositeCompletionPolicy : 청크 완료 여부를 결정하는 정책이 여러 개일 때, 정책 중 하나라도 청크 완료로 판단되면 청크 완료로 표시
+  - customCompletionPolicy : CompletionPolicy 인터페이스의 isComplete, start, update 메서드 오버라이드 하여 청크 완료 로직 구현
+
 #### 스텝 리스너
+- StepExecutionListener
+  - beforeStep(void), afterStep(ExitStatus 리턴) 메서드
+  - 데이터가 제대로 기록되었는지 확인하는 것처럼 무결성 검사 후 ExistStatus를 바꿀 수도 있음 -> 유용!
+  - annotation @BeforeStep, @AfterStep
+- ChunkListener
+  - beforeChunk(void), afterChunk(void) 메서드
+  - annotation @BeforeChunk, @AfterChunk
 
 ### 스텝 플로우
 #### 조건 로직
+- 빌더를 통해 잡의 진행방향 지정
+  - on(조건).to(다음 진행할 스텝)
+  - 조건에 들어가는 것은 ExitStatus, 와일드 카드
+    - "*" : 0개 이상의 문자 일치 (ex. C\* : COMPLETE, CORRECT)
+    - "?" : 1개의 문자 일치 (ex. ?AT : CAT, KAT)
+- JobExecutionDecider : 현재 스텝에서 어떤 레코드 처리를 건너뛰었을 때 다른 스텝을 실행하지 않게 하는 로직 구현 가능
+  - decide 메서드 구현
+    - JobExecution, StepExecution 모두 이용 가능
+    - FlowExecutionStatus(BatchStatus / ExitStatus 쌍 래핑한 래퍼 객체) 리턴
+
 #### 잡 종료하기
+- Completed : 처리가 성공적으로 종료되었음을 의미, 동일한 파라미터로 다시 실행 불가
+  - Completed로 종료하는 법 : 빌더가 제공하는 end 메서드 사용
+  - Step이 반환하는 ExitStatus 관계없이 end 메서드 사용되면 COMPLETED로 종료
+- Failed : 성공적으로 완료되지 않음, 동일한 파라미터로 다시 실행 가능
+  - Failed로 종료하는 법 : 빌더가 제공하는 fail 메서드 사용
+- Stopped : 다시 시작 가능, 오류가 발생하지 않아도 중단된 위치에서 다시 시작 가능
+  - 스텝 사이에 사람의 개입이 필요하거나 다른 검사/처리가 필요한 상황에 유용
+  - Stopped로 종료하는 법 : 빌더가 제공하는 stopAndRestart 메서드 사용
+  - 잡을 다시 시작할 때 처음부터 실행하는 것이 아니라 stopAndRestart 파라미터로 넘겨준 step부터 시작됨
+- 스텝의 ExitStatus를 평가하여 BatchStatus를 판별 -> JobRepository에 저장
+
 #### 플로우 외부화하기
+- 스텝의 시퀀스를 독자적 플로우로 만드는 방법
+  - 플로우 만드는 빌더로 플로우를 정의하고 잡 빌더에서 이를 참조하는 방식
+  - JobRepository에 저장된 결과는 플로우를 사용하는 것이나 잡에서 스텝을 구성하는 것이나 차이가 없음
+- 플로우 스텝을 사용하는 방법
+  - 플로우를 잡 빌더가 아니라 스텝으로 래핑하고 이 래핑된 스텝을 잡 빌더로 전달하는 방식
+  - 각각의 개별 스텝을 집계하지 않고도 플로우의 영향을 전체적으로 볼 수 있음
+    - 모니터링, 리포팅에 유용
+- 잡 내에서 다른 잡을 호출하는 방법(잡 스텝)
+  - 스텝 빌더에 호출하려는 다른 잡을 지정, 앞에서 정의한 스텝을 다른 잡의 스텝으로 등록하는 방식
+  - 서브 잡에 직접 파라미터 전달하지 않으므로 상위 잡의 JobParameters 또는 ExecutionContext에서 파라미터 추출해 전달
+    - jobParametersExtractor bean
+  - 하나의 마스터 잡이 연결된 여러 잡을 실행할 경우 실행 처리 제어에 제약이 있을 수 있음 -> 웬만하면 쓰지 말라!
+    - 외부 요인에 의해(다른 부서에서 제시간에 파일을 주지 않는 경우 등) 잡 실행 건너뛰어야 할 때
+    - 주기적으로 실행하던 배치 중지할 때
