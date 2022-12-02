@@ -51,10 +51,47 @@
 - DefaultBatchCongigurer에는 기본 옵션이 제공되고 있으므로 이를 상속하여 필요한 메서드만 재정의 하는 방식이 좋음
 
 ### JobRepository 커스터마이징하기
+- JobRepositoryFactoryBean을 통해 생성
+  - DefaultBatchConfigurer의 createJobRepository 메서드 재정의
+- 데이터베이스 유형, 테이블 접두어, DB 데이터 생성 시 트랜잭션 격리 레벨, 데이터 소스 변경 가능
+
 ### TransactionManager 커스터마이징하기
+- DefaultBatchConfigurer의 getTransactionManager 메서드로 어딘가에 정의해둔 PlatformTransactionManager 명시적 반환
+- 오버라이드하지 않는 이유?
+  - TransactionManager가 생성되지 않은 경우 DefaultBatchConfigurer가 setDataSource에서 DataSourceTransactionManager를 자동 생성하도록 되어 있음
+
 ### JobExplorer 커스터마이징하기
+- JobExplorer는 배치의 메타 데이터를 읽기 전용으로 제공(JobRepository는 잡의 상태를 저장/조회 가능하다는 면에서 차이 존재)
+  - 커스터마이징 시 데이터를 읽어들이는 데 사용되는 애트리뷰트들이 JobRepository와 동일
+  - dataSource, serializer, 테이블 접두어 등 커스터마이징 가능
+  - JobRepository와 JobExplorer는 동일한 데이터 저장소를 사용하므로 둘 다 모두 커스터마이징 하는 것이 좋음
+- spring container에 직접 노출되지 않으므로 InitializerBean.afterPropertiesSet() 및 FactoryBean.getObject() 호출 필요
+
 ### JobLauncher 커스터마이징하기
+- JobLauncher는 잡을 실행하는 진입점
+  - 기본 : SimpleJobLauncher 사용
+  - Controller를 통해 잡을 실행하려 할 때 SimpleJobLauncher의 동작 방식을 조정할 필요성 있음
+    - setJobRepository, setTaskExecutor를 통해 커스터마이징
+
 ### 데이터베이스 구성하기
+- application.yml 또는 application.properties 파일로 데이터베이스 구성
+- spring.batch.initialize-schema
+  - always : 애플리케이션 실행 시마다 스크립트 실행, 개발 환경에 가장 쉬운 옵션
+  - never : 스크립트 실행하지 않음
+  - embedded : 실행 시마다 데이터가 초기화된 데이터베이스 인스턴스를 사용
 
 ## 잡 메타데이터 사용하기
+- 스프링 배치는 내부적으로 여러 DAO로 JobRepository 테이블에 접근하나, 실용적인 API 제공하기도 함
+  - 주된 방법 : JobExplorer 사용하는 것
+
 ### JobExplorer
+- JobExplorer 인터페이스는 JobRepository의 이력 데이터나 최신 데이터에 접근하는 시작점
+- 다른 컴포넌크들이 JobRepository로 DB에 접근하는 반면 JobExplorer는 DB에 직접 접근, 읽기 전용이므로 안전하게 접근 가능
+- JobInstance와 JobExecution 관련 정보를 얻을 수 있는 7가지 메서드 제공
+  - findRunningjobExecutions
+  - findJobInstanceByName
+  - getJobExecution / getJobExecutions
+  - getJobInstance / getJobInstances : 현재의 JobInstance도 함께 반환된다는 것 알아두기
+  - getJobInstanceCount
+  - getJobNames
+  - getStepExecution
