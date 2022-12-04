@@ -12,7 +12,7 @@
 
 ### 관계형 데이터베이스 사용하기
 스프링 배치에서 기본적으로 사용되는 JobRepository, 배치 메타데이터를 저장하는 6개의 테이블  
-<img src="/book_image/jobReposiotory_schema.jpg">
+<img src="book_image/jobReposiotory_schema.jpg">
 
 - 시작점, BATCH_JOB_INSTANCE
   - 잡 파라미터로 잡 식별, 잡의 논리적 실행

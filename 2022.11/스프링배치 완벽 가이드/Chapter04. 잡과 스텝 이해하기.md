@@ -102,7 +102,7 @@ JobLauncher의 도움으로 Job 실행 -> JobInstance 생성(BATCH_JOB_INSTANCE,
 - Chunk 기반 처리 모델
   - ItemReader, (ItemProcessor), ItemWriter로 구성
   - 청크 또는 레코드 그룹 단위로 처리
-  - <img src="/book_image/chunk_based_processing.jpg">
+  - <img src="book_image/chunk_based_processing.jpg">
 
 ### 스텝 구성
 #### 테스크릿 스텝
