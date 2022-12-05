@@ -6,6 +6,13 @@ to-be : 스프링 부트가 생성하는 실행 가능한 jar 파일로 기동�
 어떻게 잡을 실행하는지, 스케쥴러를 사용하는 방법, 실행 중인 잡을 중지하고 재시작하는 내용 등에 대해 6장에서 다룰 예정
 
 ## 스프링 부트로 배치 잡 시작시키기
+- CommandLineRunner와 ApplicationRunner : ApplicationContext가 리프레시 되고 코드를 실행할 준비가 되면 호출하는 메서드 가짐
+- JobLauncherCommandLineRunner(CommandLineRunner의 일종)
+  - JobLauncher를 사용해 잡을 실행
+  - ApplicationContext 내에서 찾아낸 모든 잡을 실행시킴
+- 스프링 부트로 배치 잡 시작시키기 위한 두 가지 구상 방법
+  - REST 호출이나 특정 이벤트 등으로 잡을 실행할 계획이라면 spring.batch.job.enabled 프로퍼티를 false로 수정할 것
+  - 여러 잡 중에서 특정 잡만 실행시키고 싶을 경우 spring.batch.job.names 프로퍼티를 수정할 것(쉼표 가능, 순서대로 실행)
 
 ## REST 방식으로 잡 실행하기
 ### 쿼츠를 사용해 스케줄링하기
