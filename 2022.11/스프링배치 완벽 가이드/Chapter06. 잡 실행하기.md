@@ -17,7 +17,17 @@ to-be : 스프링 부트가 생성하는 실행 가능한 jar 파일로 기동�
 ## REST 방식으로 잡 실행하기
 - JobLauncher 인터페이스 사용, 잡과 잡 파라미터 전달
   - 잡 파라미터는 JobLauncher의 구현체인 SimpleJobLauncher는 잡 파라미터의 조작을 지원하지 않으므로 전달 전에 전처리 필요
+  - @EnableBatchProcessing 어노테이션을 사용할 시 자동으로 사용되는 JobLauncher가 SimpleJobLauncher
   - 적절한 TaskExecutor 구현체를 통해 동기/비동기 구동방식 선택
+    - 대부분의 배치 잡은 처리량이 많으므로 비동기 방식으로 실행하는 것이 더 적합할 때가 있음
+    - SimpleJobLauncher는 동기식으로 실행, ExitStatus 반환
+    - 비동기식으로 실행할 경우 JobExecution의 ID 값만 만환
+- JobLauncher는 JobParametersIncrementer도 관리
+  - JobParametersBuilder의 getNextJobParameters 메서드를 통해 JobParametersIncrementer를 증가시킴
+  - getNextJobParameters 메서드에 Job을 파라미터로 넘겨주는데, 이는 해당 잡이 Incrementer를 가지고 있는지 판별하기 위함
+  - Incrementer가 있다면 JobParameters에 적용
+- JobLauncher는 잡이 재시작된 것인지 판별하여 JobParameters를 적절히 처리하는 것도 담당
+
 ### 쿼츠를 사용해 스케줄링하기
 
 ## 잡 중지하기
