@@ -50,6 +50,15 @@ to-be : 스프링 부트가 생성하는 실행 가능한 jar 파일로 기동�
 
 ### 프로그래밍적으로 중지하기
 #### 중지 트랜지션 사용하기
+- 주입받은 ItemReader에 read 작업 위임
+- process 메서드에서 읽어들인 데이터들의 줄 수 count하며 데이터를 model에 매핑
+- 스텝이 완료되면 afterStep 메서드 호출, 읽어들인 레코드 수와 기대되는 레코드 수를 비교하여 ExitStatus 반환
+  - ExitStatus.STOPPED : 중지
+- 스프링 배치는 ItemReader, ItemProcessor, ItemWriter가 ItemStream의 구현체인지 자동으로 확인/등록
+  - custom ItemReader의 경우 스프링에 명시적으로 등록되어 있지 않아 ItemStream을 구현했는지 프레임워크가 확인하지 않음
+    - 해결방법 1 : 잡에서 ItemReader 명시적으로 등록
+    - 해결방법 2 : custom ItemReader에서 ItemStream을 구현하고 적절한 라이프 사이클에 따라 메서드를 호출하도록 하는 방법
+
 #### StepExecution을 사용해 중지하기
 
 ### 오류 처리
