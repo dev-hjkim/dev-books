@@ -58,8 +58,23 @@ to-be : 스프링 부트가 생성하는 실행 가능한 jar 파일로 기동�
   - custom ItemReader의 경우 스프링에 명시적으로 등록되어 있지 않아 ItemStream을 구현했는지 프레임워크가 확인하지 않음
     - 해결방법 1 : 잡에서 ItemReader 명시적으로 등록
     - 해결방법 2 : custom ItemReader에서 ItemStream을 구현하고 적절한 라이프 사이클에 따라 메서드를 호출하도록 하는 방법
-
+- @StepScope를 사용하면 Step마다 ItemReader, ItemProcessor, ItemWriter 인스턴스를 새로 생성하므로 재사용이 가능
+- 아래와 같이 트랜지션 API로 잡 플로우 구성하여 중지/재시작 처리
+  - step1 STOPPED 반환할 경우 해당 스텝부터 재시작, STOPPED 아닐 경우 step2 -> step3 -> 종료
+```
+@Bean
+public Job transactionJob() {
+    return this.jobBuilderFactory.get("transactionJob")
+            .start(step1())
+            .on("STOPPED").stopAndRestart(step1())
+            .from(step1()).on("*").to(step2())
+            .from(step2()).next(step3())
+            .end()
+            .build();
+}
+```
 #### StepExecution을 사용해 중지하기
+
 
 ### 오류 처리
 #### 잡 실패
