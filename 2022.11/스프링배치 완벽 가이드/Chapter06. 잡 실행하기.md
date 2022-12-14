@@ -74,10 +74,21 @@ public Job transactionJob() {
 }
 ```
 #### StepExecution을 사용해 중지하기
-
+- @BeforeStep에서 StepExecution에 접근할 수 있는 특징을 이용하여 중지시키는 방법
+  - 코드와 구성이 좀더 깔끔해질 수 있다는 장점 존재
+- 잡이 STOPPED 상태를 반환했던 중지 트랜지션을 사용한 방법과 달리 JobInterruptionException을 반환
+- ItemReader, ItemProcessor, ItemWriter에 대해 자세히 알기 전에 해당 컴포넌트들을 사용하는 예제들이 등장하여 제대로 이해 안됨
+  - 뒷장을 읽고 다시 돌아와 읽기!!!
 
 ### 오류 처리
+- 잘못된 데이터의 수신, NullPointerException 등등의 오류 처리 수행 옵션과 구현 방법 소개
 #### 잡 실패
+- 스프링 배치 기본 동작이 가장 안전(잡이 중지되면 롤백하므로)
+  - 스프링은 예외가 발생하면 스텝과 잡이 실패한 것으로 간주
+- 잡 실패는 잡의 중지와는 다름
+  - 잡 실패 : ExitStatus.FAILED
+  - 잡 중지 : ExitStatus.STOPPED
+- 잡 실패 역시 잡을 재시작하면 중단됐던 부분부터 시작
 
 ## 재시작 제어하기
 ### 잡의 재시작 방지하기
