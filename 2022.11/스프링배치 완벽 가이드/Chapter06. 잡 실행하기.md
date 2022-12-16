@@ -92,6 +92,18 @@ public Job transactionJob() {
 
 ## 재시작 제어하기
 ### 잡의 재시작 방지하기
-### 재시작 횟수를 제한하도록 구성하기
-### 완료된 스텝 재실행하기
+- 첫 시도에 실패한 잡을 다시 실행시키지 않게 함
+  - JobBuilder의 preventRestart() 호출
+  - 잡 인스턴스가 이미 존재하며 재시작 불가하다는 메시지를 출력하며 재시작 불가능
 
+### 재시작 횟수를 제한하도록 구성하기
+- 무한정 재시도하는 것이 아니라 정해진 횟수 만큼만 재시도하도록 제한하고 싶을 경우
+  - 스텝 수준에서 startLimit 호출
+  - limit 이상 재시도할 경우 StartLimitExceedException 발생
+  - 재시작 할 때 사용할 구성은 allowStartIfComplete() 메서드로 지정
+
+### 완료된 스텝 재실행하기
+- 스프링 배치 잡의 경우 동일 파라미터로 한 번만 실행 가능하지만 스텝의 경우 두 번 이상 실행 가능
+  - allowStartIfComplete()이 이를 가능케 함
+  - 단, 잡의 ExitStatus가 COMPLETE일 경우에는 allowStartIfComplete(true) 이더라도 다시 실행 불가  
+  (잡 자체를 다시 실행할 수 없음)
