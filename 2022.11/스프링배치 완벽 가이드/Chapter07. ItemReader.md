@@ -4,10 +4,20 @@
 스프링 배치는 플랫 파일, XML, 다양한 데이터베이스, 커스텀한 Reader를 만드는 방법 등 모든 유형의 입력 데이를 처리할 수 있는 표준 방법 제공
 
 ## ItemReader 인터페이스
+- 전략 인터페이스
+- read 라는 단일 메서드 정의
+  - 스텝 내에서 처리할 아이템 한 개 반환
+- 스텝은 청크 내의 데이터가 몇 개나 처리되었는지 관리, ItemProcessor, ItemWriter로 넘겨짐
 
 ## 파일 입력
-
 ### 플랫 파일
+- 파일 내의 데이터 포맷이나 의미를 정의하는 메타데이터 미존재
+- 스프링 배치에서 파일을 읽을 때 사용하는 컴포넌트, FlatFileItemReader
+  - 읽어들일 대상 파일인 Resource와 LineMapper 인터페이스 구현체로 구성
+  - LineMapper의 구현체 중 하나인 DefaultLineMapper
+    - LineTokenizer : 파일에서 가져온 데이터 한 줄을 파싱해 FieldSet으로 만듬
+    - FieldSetMapper : FieldSet을 도메인 객체로 매핑
+
 #### 고정 너비 파일
 #### 필드가 구분자로 구분된 파일
 #### 커스텀 레코드 파싱
