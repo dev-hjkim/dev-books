@@ -19,6 +19,14 @@
     - FieldSetMapper : FieldSet을 도메인 객체로 매핑
 
 #### 고정 너비 파일
+- 동일한 스텝 내에서 FlatFileItemReader를 사용하는 경우 각 리더의 상태를 저장하는 작업이 서로에게 영향을 주지 않도록 하는데 name 속성 필요
+- FixedLengthTokenizer 구현체 사용, 컬럼 이름과 Range 객체의 배열을 지정
+  - 그 외 FieldSetFactory : 기본적으로 DefaultFieldSetFactory, FieldSet 생성하는 데 사용
+  - strict 플래그 : 기본적으로 true, 정의된 파싱 정보보다 더 많은 항목이 포함되어 있을 경우 예외 던지도록 하는 데 사용
+- targetType 메서드 호출로 BeanWrapperFieldSetMapper 생성
+  - LineTokenizer에 구성된 컬럼 이름들로 setter 메소드를 호출하는 방식
+- FlatFileItemReader와 FixedLengthTokenizer를 사용하여 고정 너비 파일 처리
+
 #### 필드가 구분자로 구분된 파일
 #### 커스텀 레코드 파싱
 #### 여러 가지 레코드 포맷
