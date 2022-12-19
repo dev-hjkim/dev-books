@@ -35,7 +35,21 @@
 - FieldSetMapper 인터페이스 구현을 통해 FieldSet의 각 필드를 도메인 객체에 커스텀하게 매핑 가능
 
 #### 커스텀 레코드 파싱
+- FieldSetMapper 외 LineTokenizer도 커스텀하게 구현 가능
+- 용례
+  - 특이한 파일 포맷 파싱
+  - 엑셀 워크시트 같은 서드파티 파일 포맷 파싱
+  - 특수한 타입 변환 요구 조건 처리
+
 #### 여러 가지 레코드 포맷
+- 이전 예제에서는 파일 내부 레코드가 모두 동일한 형식, DefaultLineMapper 사용
+  - LineTokenizer 하나, FieldSetMapper 하나 사용
+- 하나의 파일 내부에 여러 레코드 포맷이 존재하는 경우 PatternMatchingCompositeLineMapper 사용
+  - LineTokenizer로 구성된 Map, FieldSetMapper로 구성된 Map
+  - Map의 키 값은 레코드의 패턴
+- Double, Date 타입의 경우 커스텀 FieldSetMapper 필요
+  - BeanWrapperFieldSetMapper는 특수 타입의 필드를 변환할 수 없음(readDate, readDouble 등으로 구현)
+
 #### 여러 줄에 걸친 레코드
 #### 여러 개의 소스
 
