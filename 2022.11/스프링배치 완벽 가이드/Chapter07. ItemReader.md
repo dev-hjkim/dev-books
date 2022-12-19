@@ -28,6 +28,12 @@
 - FlatFileItemReader와 FixedLengthTokenizer를 사용하여 고정 너비 파일 처리
 
 #### 필드가 구분자로 구분된 파일
+- 메타데이터 파일 내 소량 제공
+- DelimitedLineTokenizer 구현체 사용
+  - 구분자 설정 가능, 기본값 : 쉼표(,)
+  - 인용 문자로 사용할 값 설정 가능, (ex. #, " 등등)
+- FieldSetMapper 인터페이스 구현을 통해 FieldSet의 각 필드를 도메인 객체에 커스텀하게 매핑 가능
+
 #### 커스텀 레코드 파싱
 #### 여러 가지 레코드 포맷
 #### 여러 줄에 걸친 레코드
