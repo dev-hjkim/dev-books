@@ -51,6 +51,15 @@
   - BeanWrapperFieldSetMapper는 특수 타입의 필드를 변환할 수 없음(readDate, readDouble 등으로 구현)
 
 #### 여러 줄에 걸친 레코드
+- Customer 객체, Transaction 객체 사이에 종속 관계가 있는 경우
+  - 즉, Customer 내부에 List\<Transaction>이 들어갈 수 있는 경우
+- 레코드가 언제 끝나는지 알 수 없음. (footer가 있는 경우는 알기 쉬우나, 보통의 경우 footer가 주어지지 않음)
+- 다음 Customer 객체가 나올 때까지 Transaction List에 데이터를 넣도록 CustomItemReader에 로직 추가
+- ItemReader가 아닌 ItemStreamReader 구현
+  - read 메서드 : Customer와 Transaction 레코드를 읽어들여 조합하는 역할
+  - peek 메서드 : 레코드를 미리 읽어두는 역할, 읽어들였지만 아직 처리하지 않았을 경우 동일 레코드 다시 반환
+- 커밋카운트는 Customer를 기준으로 카운트 됨
+
 #### 여러 개의 소스
 
 ### XML
