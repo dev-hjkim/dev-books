@@ -61,6 +61,17 @@
 - 커밋카운트는 Customer를 기준으로 카운트 됨
 
 #### 여러 개의 소스
+- 동일한 포맷으로 작성 된 복수개의 파일을 처리하는 경우
+- 스프링에서 MultiResourceItemReader 제공, ItemReader를 매핑하지만, 리소스 정의를 자식 ItemReader에게 맡기지 않음
+  - 리더의 이름을 전달받음
+  - Resource 객체의 배열 전달받음(읽어들여야 할 파일 목록)
+  - 실제 작업을 위임할 컴포넌트 전달받음
+    - ItemStreamReader 인터페이스로 충분하지 않음. 하위 인터페이스인 ResourceAwareItemReaderItemStream 구현필요
+    - setResource 메서드 추가 구현해야 함
+- customerFile1.csv, customerFile2.csv, customerFile3.csv 로 배치 실행 중 customerFile2.csv에서 에러 발생, 이때 customerFile4.csv 추가
+  - Expected : 재시작 했을 때 동일하게 customerFile1.csv, customerFile2.csv, customerFile3.csv 재실행
+  - Actual : customerFile1.csv, customerFile2.csv, customerFile3.csv, customerFile4.csv 실행
+  - 이러한 상황으로부터의 보호 방법 : 배치 실행 시 사용할 디렉터리를 별도로 생성하여 관리
 
 ### XML
 
