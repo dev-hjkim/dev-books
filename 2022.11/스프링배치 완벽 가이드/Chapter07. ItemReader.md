@@ -88,6 +88,15 @@
     - Castor, JAXB, JiBX, XML, Beans, XStream 구현체 제공됨
 
 ### JSON
+- JsonItemReader, 실제 파싱 작업은 JsonObjectReader 구현체에 위임됨(Jackson, Gson 2개의 파싱 엔진 사용)
+  - 파싱에 사용할 JsonObjectReader 필요
+  - 리소스 전달 필요
+  - (Optional) 입력이 반드시 존재해야 하는지를 나타내는 플래그, 상태 저장 여부를 나타내는 플래그, 현재의 ItemCount 구성 가능
+- ObjectMapper : Jackson이 JSON을 읽고 쓰는 데 사용하는 주요 클래스
+  - 보통 ObjectMapper를 생성하는 코드를 작성할 필요 없으나, 날짜 형식 지정이 필요한 경우 생성하여 형식 지정 필요
+- JacksonJsonObjectReader, JsonObjectReader의 구현체
+  - 반환할 클래스 필요
+  - ObjectMapper 필요(ex. 날짜 형식 커스터마이징 한 ObjectMapper)
 
 ## 데이터베이스 입력
 
