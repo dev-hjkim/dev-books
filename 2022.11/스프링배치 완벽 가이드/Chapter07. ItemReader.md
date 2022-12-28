@@ -131,7 +131,16 @@
   - 페이지의 크기 필요
 
 ### 하이버네이트
+- 자바 ORM 기술
+- 커밋할 때 세션을 flush 하는 기능 제공(캐시에 계속 아이템을 쌓게 되면 OutOfMemoryException 발생)
+
 #### 하이버네이트로 커서 처리하기
+- spring-boot-starter-jpa 의존성 필요
+- DataSource 커넥션과 하이버네이트 세션을 아우르는 TransactionManager 필요
+  - DefaultBatchConfigurer.getTransactionManager() 오버라이드하여 BatchConfigurer의 커스텀 구현체 구현
+- HibernateCursorItemReader를 사용하여 데이터 읽어들임
+  - 이름, SessionFactory, 쿼리 문자열, 쿼리에 사용할 파라미터 필요
+
 #### 하이버네이트를 사용해 페이징 기법으로 데이터베이스에 접근하기
 
 ### JPA
