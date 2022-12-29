@@ -142,6 +142,8 @@
   - 이름, SessionFactory, 쿼리 문자열, 쿼리에 사용할 파라미터 필요
 
 #### 하이버네이트를 사용해 페이징 기법으로 데이터베이스에 접근하기
+- HibernatePagingItemReader
+  - 사용할 페이지 크기 지정 필요
 
 ### JPA
 
