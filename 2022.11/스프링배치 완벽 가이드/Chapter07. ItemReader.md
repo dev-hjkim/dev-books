@@ -146,6 +146,10 @@
   - 사용할 페이지 크기 지정 필요
 
 ### JPA
+- JPA는 아이템 조회 시 커서 기반 방법 미제공
+- JpaPagingItemReader
+  - 이름, entityManager, 실행할 쿼리, 파라미터 필요로 함
+  - 실행할 쿼리를 Query API(JpaQueryProvider 인터페이스 구현)로 지정하는 방법도 존재
 
 ### 저장 프로시저
 
