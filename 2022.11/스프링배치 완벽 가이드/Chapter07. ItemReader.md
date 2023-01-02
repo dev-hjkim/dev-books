@@ -152,6 +152,10 @@
   - 실행할 쿼리를 Query API(JpaQueryProvider 인터페이스 구현)로 지정하는 방법도 존재
 
 ### 저장 프로시저
+- StoredProcedureItemReader
+  - JdbcCursorItemReader 바탕으로 설계됨
+  - 이름, 데이터 소스, RowMapper, PreparedStatementSetter 구성 필요
+  - SQL을 지정하는 대신 호출할 프로시저의 이름 지정
 
 ### 스프링 데이터
 #### 몽고 DB
