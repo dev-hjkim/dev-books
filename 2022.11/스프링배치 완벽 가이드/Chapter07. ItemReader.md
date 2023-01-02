@@ -158,7 +158,20 @@
   - SQL을 지정하는 대신 호출할 프로시저의 이름 지정
 
 ### 스프링 데이터
+- 스프링 데이터의 목적 : 기본적인 데이터 저장소의 특징을 유지하면서도, 친숙하고 일관된 스프링 기반의 데이터 접근 프로그래밍 모델을 제공하는 것
+- NoSQL, SQL 모두에 대해 고유 기능 접근 가능, 일관된 추상화의 집합 제공
+
 #### 몽고 DB
+- 높은 가용성과 확장성 : 기본적으로 replication 제공(가용성), 샤딩 제공(확장성)
+- 지리공간정보 지원 : 특정 지점이 어떤 경계 내에 속하는지 결정하는 것 같은 질의 지원
+  - (?????)
+- MongoItemReader
+  - 페이지 기반 ItemReader
+  - MongoOperations 구현체, name, targetType, JSON 기반 쿼리 또는 Query 인스턴스 필요
+  - 그 외 정렬, 힌트, 결과에 포함할 필드 목록, 질의할 몽고 DB 컬렉션 등 설정 가능
+- org.springframework.boot:spring-boot-starter-data-mongodb 의존성 필요
+- DB 설정, application.yml, spring.data.mongodb.databse : {db 이름} 프로퍼티 추가 필요
+
 #### 스프링 데이터 리포지터리
 
 ## 기존 서비스
