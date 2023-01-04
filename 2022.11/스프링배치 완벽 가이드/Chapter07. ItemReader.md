@@ -173,6 +173,11 @@
 - DB 설정, application.yml, spring.data.mongodb.databse : {db 이름} 프로퍼티 추가 필요
 
 #### 스프링 데이터 리포지터리
+- RepositoryItemReader
+  - PagingAndSortingRepository를 통해 페이징 쿼리 실행, 따라서 이를 상속하는 리포지터리 필요함
+  - 스프링 데이터가 리포지터리를 지원하는 어떤 데이터 저장소건 상관없이 질의 수행 가능
+  - 페이징 메커니즘을 작동시키기 위해서는 Pageable 파라미터 추가 필요
+    - 한 페이지만큼 요청하는 데 필요한 파라미터인 페이지 크기, 오프셋, 페이지 번호, 정렬 옵션 캡슐화
 
 ## 기존 서비스
 
