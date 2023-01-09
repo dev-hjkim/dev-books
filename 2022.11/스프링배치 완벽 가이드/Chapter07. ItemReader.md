@@ -180,6 +180,11 @@
     - 한 페이지만큼 요청하는 데 필요한 파라미터인 페이지 크기, 오프셋, 페이지 번호, 정렬 옵션 캡슐화
 
 ## 기존 서비스
+- 배치 처리에서 기존 애플리케이션의 코드를 사용하는 방법
+- ItemReaderAdapter
+  - 호출 시마다 반환되는 객체는 ItemReader가 반환하는 객체로, 이 객체는 ItemProcessor -> ItemWriter로 전달됨
+    - Collection을 반환하는 경우 단일 아이템으로 ItemProcessor, ItemWriter로 전달되어야 함
+  - 입력 데이터를 모두 처리했을 때에는 반드시 null 반환해야 함
 
 ## 커스텀 입력
 
