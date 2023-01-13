@@ -193,6 +193,8 @@
     - open : ItemReader에서 필요한 상태를 초기화하기 위해 호출(이전 상태 복원, 데이터베이스 연결 포함)
     - update : 잡의 상태 갱신
     - close : 리소스를 닫는 데 사용
+  - ItemStreamSupport를 상속하면 컴포넌트의 이름으로 고유 키를 생성하는 getExecutionContextKey라는 유틸리티 메서드 제공
+    - ItemStream 인터페스도 구현해줌
 
 ## 에러 처리
 
