@@ -19,6 +19,17 @@ ItemProcessor 부분은 비즈니스 요구 사항에 따라 서로 달라지는
 
 ### ValidatingItemProcessor
 #### 입력 데이터의 유효성 검증
+- ItemProcessor의 구현체 ValidatingItemProcessor
+  - 프로세스 처리 전 유효성 검증 수행
+  - 오류 발생 시 ValidationException 발생
+- spring-boot-starter-validation
+  - JSR-303 유효성 검증 도구의 하이버네이트 구현체를 가져와 애너테이션으로 유효성 검증 규칙 적용
+- BeanValidatingItemProcessor : 각 아이템을 검증하는 매커니즘 제공
+  - JSR-303을 활용해 유효성 검증을 제공하는 ValidationItemProcessor를 상속한 ItemProcessor
+  - Validator 구현체를 통해 유효성 검증
+    - validate(T value)라는 단일 메서드 지님
+  - JSR-303 사양에 따르는 Validator 객체를 생성한다는 점에서 특별
+
 ### ItemProcessorAdapter
 ### ScriptItemProcessor
 ### CompositeItemProcessor
