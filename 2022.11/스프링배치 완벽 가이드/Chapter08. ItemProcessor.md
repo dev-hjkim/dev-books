@@ -29,6 +29,11 @@ ItemProcessor 부분은 비즈니스 요구 사항에 따라 서로 달라지는
   - Validator 구현체를 통해 유효성 검증
     - validate(T value)라는 단일 메서드 지님
   - JSR-303 사양에 따르는 Validator 객체를 생성한다는 점에서 특별, 스프링의 자체적인 Validator와 스프링 배치의 Validator는 다름에 유의
+- 유효성 검증 기능을 직접 구현하는 경우 : ValidatingItemProcessor 적용
+  - 직접 구현한 Validator 인터페이스 구현체 주입
+  - 재시작 시 상태를 유지하려면 유효성 검증기는 ItemStreamSupport를 상속하여 ItemStream 인터페이스를 구현할 것
+    - open 메서드 : 이전 Execution에 저장된 내용 확인 후 저장되어 있을 경우 해당 값으로 원복
+    - update 메서드 : 오류 발생 시 현재 상태를 ExecutionContext에 저장
 
 ### ItemProcessorAdapter
 ### ScriptItemProcessor
