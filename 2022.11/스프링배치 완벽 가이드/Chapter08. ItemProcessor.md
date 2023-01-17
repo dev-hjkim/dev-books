@@ -28,7 +28,7 @@ ItemProcessor 부분은 비즈니스 요구 사항에 따라 서로 달라지는
   - JSR-303을 활용해 유효성 검증을 제공하는 ValidationItemProcessor를 상속한 ItemProcessor
   - Validator 구현체를 통해 유효성 검증
     - validate(T value)라는 단일 메서드 지님
-  - JSR-303 사양에 따르는 Validator 객체를 생성한다는 점에서 특별
+  - JSR-303 사양에 따르는 Validator 객체를 생성한다는 점에서 특별, 스프링의 자체적인 Validator와 스프링 배치의 Validator는 다름에 유의
 
 ### ItemProcessorAdapter
 ### ScriptItemProcessor
