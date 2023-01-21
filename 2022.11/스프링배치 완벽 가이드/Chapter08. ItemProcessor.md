@@ -36,6 +36,9 @@ ItemProcessor 부분은 비즈니스 요구 사항에 따라 서로 달라지는
     - update 메서드 : 오류 발생 시 현재 상태를 ExecutionContext에 저장
 
 ### ItemProcessorAdapter
+- 이미 개발된 서비스가 ItemProcessor 역할을 하도록 함
+  - TargetObject, TargetMethod 필수 설정 필요
+
 ### ScriptItemProcessor
 ### CompositeItemProcessor
 
