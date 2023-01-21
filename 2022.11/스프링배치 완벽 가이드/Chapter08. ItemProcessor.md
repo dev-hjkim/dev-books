@@ -40,6 +40,8 @@ ItemProcessor 부분은 비즈니스 요구 사항에 따라 서로 달라지는
   - TargetObject, TargetMethod 필수 설정 필요
 
 ### ScriptItemProcessor
+- ItemProcessorAdapter의 기능과 동일하나 자바 서비스 로직을 수행하는 대신에 자바스크립트 로직을 수행
+
 ### CompositeItemProcessor
 
 ## ItemProcessor 직접 만들기
