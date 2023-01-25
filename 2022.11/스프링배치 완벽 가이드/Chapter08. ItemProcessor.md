@@ -43,6 +43,12 @@ ItemProcessor 부분은 비즈니스 요구 사항에 따라 서로 달라지는
 - ItemProcessorAdapter의 기능과 동일하나 자바 서비스 로직을 수행하는 대신에 자바스크립트 로직을 수행
 
 ### CompositeItemProcessor
+- ItemProcessor를 체인처럼 연결
+  - 체인처럼 연결된 여러 ItemProcessor 중 하나의 ItemProcessor라도 null을 반환하면 해당 아이템은 더이상 처리되지 않음
+  - ItemProcessor1, ItemProcessor2가 연결되어 있다고 할 때 ItemProcessor1의 반환값이 ItemProcessor2의 입력값이 되어야 함
+- 여러 ItemProcessor의 래퍼 역할
+- ClassifierCompositeItemProcessor
+  - classify 메서드 : 해당 아이템을 처리할, 조건에 맞는 ItemProcessor 반환하여 위임
 
 ## ItemProcessor 직접 만들기
 ### 아이템 필터링하기
