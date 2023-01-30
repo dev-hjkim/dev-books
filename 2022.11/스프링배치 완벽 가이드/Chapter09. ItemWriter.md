@@ -18,6 +18,10 @@
   - 디스크로 flush 되면 롤백이 불가하기 때문
 
 #### 형식화된 텍스트 파일
+- 출력 파일은 고정 너비이거나 훨씬 복잡한 형식일 수 있음
+- FormatterLineAggregator 사용
+  - FlatFileItemWriterBuilder 내의 FormattedBuilder로 출력 형식과 추출대상 필드를 순서대로 구성
+
 #### 구분자로 구분된 파일
 #### 파일 관리 옵션
 
