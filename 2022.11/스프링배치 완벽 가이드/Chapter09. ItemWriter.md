@@ -8,6 +8,14 @@
 
 ## 파일 기반 ItemWriter
 ### FlatFileItemWriter
+- 출력할 리소스와 LineAggregator 구현체로 구성
+  - LineAggregator : 객체를 기반으로 출력 문자열 생성
+  - FieldExtractor : 제공되는 아이템의 필드에 접근할 수 있게 해줌, 대부분의 LineAggregator 구현체에서 사용
+    - BeanWrapperFieldExtractor : getter를 사용해 빈 프로퍼티에 접근
+    - PassThroughFieldExtractor : 아이템 바로 반환
+- 트랜잭션 주기 내에서 실제 쓰기 작업을 가능한 늦게 수행하도록 설계됨
+  - TransactionSynchronizationAdapter의 beforeCommit 메서드를 사용해 메커니즘 구현
+  - 디스크로 flush 되면 롤백이 불가하기 때문
 
 #### 형식화된 텍스트 파일
 #### 구분자로 구분된 파일
