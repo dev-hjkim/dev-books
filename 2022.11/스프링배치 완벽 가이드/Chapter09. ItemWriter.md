@@ -23,6 +23,10 @@
   - FlatFileItemWriterBuilder 내의 FormattedBuilder로 출력 형식과 추출대상 필드를 순서대로 구성
 
 #### 구분자로 구분된 파일
+- DelimitedLineAggregator 사용
+  - BeanWrapperFieldExtractor 사용하여 Object 추출, 엘리먼트 사이에 구분자를 넣어 문자열 연결
+  - FlatFileItemWriterBuilder가 구분자로 구분된 파일을 생성하는 데 필요한 LineAggregator 리소스를 구성하는 별도 빌더 제공
+
 #### 파일 관리 옵션
 
 ### StaxEventItemWriter
