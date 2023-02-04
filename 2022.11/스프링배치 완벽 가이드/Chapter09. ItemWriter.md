@@ -40,6 +40,12 @@
   - false : default
 
 ### StaxEventItemWriter
+- FlatFileItemWriter와 동일하게 chunk 단위로 XML 생성
+- 리소스, 루트 엘리먼트 이름, 아이템을 XML 프래그먼트로 변환하는 마샬러로 구성
+  - StaxEventItemReader는 리소스, 루트 앨리먼트 이름, XML 입력을 객체로 변환하는 언마샬러로 구성
+- XStreamMarshaller 클래스를 사용할 경우 어트리뷰트의 이름을 패키지명을 포함한 클래스의 전체 이름을 사용하므로  
+  별칭을 지정한 Map을 setAliases를 통해 제공해주어야 함
+  - org.springframework.spring-oxm 과 com.thoughtworks.xstream:xstream 의존성 추가도 필요
 
 ## 데이터베이스 기반 ItemWriter
 ### JdbcBatchItemWrite
