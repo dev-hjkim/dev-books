@@ -28,6 +28,16 @@
   - FlatFileItemWriterBuilder가 구분자로 구분된 파일을 생성하는 데 필요한 LineAggregator 리소스를 구성하는 별도 빌더 제공
 
 #### 파일 관리 옵션
+- shouldDeleteIfEmpty
+  - true : 아무 아이템도 쓰여지지 않았을 경우 스텝이 완료되는 시점에 해당 파일이 삭제됨(헤더나 푸터만 존재하는 경우 역시 item 개수는 0이므로 삭제됨)
+  - false : 파일이 생성되고 비어있는 채로 남아 있음(default)
+- shouldDeleteIfExists
+  - true : 쓰기 작업 대상 출력파일과 이름이 같은 파일이 존재하면 해당 파일을 삭제(default)
+  - false : 이미 존재하는 파일이 있으므로 ItemStreamException 발생
+- appendAllowed
+  - true : shouldDeleteIfExists 플래그 자동으로 false로 설정, 이미 파일이 존재하면 기존 파일에 데이터 추가 / 없으면 새로 생성
+    - 여러 스텝이 하나의 출력 파일에 쓰기 작업을 할 경우 유용
+  - false : default
 
 ### StaxEventItemWriter
 
