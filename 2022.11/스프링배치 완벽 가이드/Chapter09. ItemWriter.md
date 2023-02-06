@@ -48,7 +48,12 @@
   - org.springframework.spring-oxm 과 com.thoughtworks.xstream:xstream 의존성 추가도 필요
 
 ## 데이터베이스 기반 ItemWriter
+쓰기 작업을 트랜잭션과 분리하는 파일 기반 처리와 달리 물리적 쓰기를 트랜잭션의 일부분으로 포함 가능
+
 ### JdbcBatchItemWrite
+- JdbcTemplate 사용
+
+
 ### HibernateItemWriter
 ### JpaItemWriter
 
