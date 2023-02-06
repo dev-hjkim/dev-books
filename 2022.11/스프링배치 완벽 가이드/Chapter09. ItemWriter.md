@@ -48,7 +48,21 @@
   - org.springframework.spring-oxm 과 com.thoughtworks.xstream:xstream 의존성 추가도 필요
 
 ## 데이터베이스 기반 ItemWriter
+쓰기 작업을 트랜잭션과 분리하는 파일 기반 처리와 달리 물리적 쓰기를 트랜잭션의 일부분으로 포함 가능
+
 ### JdbcBatchItemWrite
+- JdbcTemplate 사용
+  - 한 건마다 SQL을 한 번씩 호출하는 것이 아니라 하나의 청크에 대한 모든 SQL문을 한 번에 실행
+- 물음표를 값의 placeholder로 사용하는 방법
+  - ```insert into customer(name, age) values (?, ?)```
+  - ItemPreparedStatementSetter 인터페이스 구현체 구현하여 JdbcBatchItemWriter 구성
+- 네임드 파라미터(:name)를 값의 placeholder로 사용하는 방법
+  - ```insert into customer(name, age) values (:name, :age)```
+  - PreparedStatement 표기법보다 안전
+  - ItemParameterSourceProvider 인터페이스 구현체 구현하여 JdbcBatchItemWriter 구성
+    - 실행할 statement의 파라미터를 설정하지 않음. 값을 추출하여 PreparedStatement 객체로 반환하는 역할
+    - 스프링에서 구현체를 제공하므로 값을 추출하기 위해 직접 코드를 작성할 필요 없음
+
 ### HibernateItemWriter
 ### JpaItemWriter
 
