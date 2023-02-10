@@ -72,6 +72,11 @@
 - 프레임워크가 많은 일을 수행해주어 스프링 배치의 구성은 매우 간단해짐
 
 ### JpaItemWriter
+- HibernateItemWriter와 거의 동일한 구성
+- 데이터베이스 쓰기 작업에 관련하여 많은 일을 수행해주므로 스프링 배치가 할 일이 적음
+- 청크가 완료되면 아이템이 JpaItemWriter로 전달되고 저장한 뒤 flush 호출하기 전 아이템마다 EntityManager의 merge 메서드 호출
+  - Hibernate에서 HibernateTransactionManager를 생성했으나 Jpa에서는 JpaTransactionManager 생성
+- Hibernate에서는 SessionFactory / Jpa에서는 EntityManagerFactory 의존성
 
 ## 스프링 데이터의 ItemWriter
 ### 몽고DB
