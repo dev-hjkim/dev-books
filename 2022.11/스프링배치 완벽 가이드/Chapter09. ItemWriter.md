@@ -64,6 +64,13 @@
     - 스프링에서 구현체를 제공하므로 값을 추출하기 위해 직접 코드를 작성할 필요 없음
 
 ### HibernateItemWriter
+- 청크가 완료되면 아이템이 HibernateItemWriter로 전달되고 Session.saveOrUpdate 메서드 호출, 모든 아이템이 저장/수정되면 Session flush
+- org.springframework.boot:spring-boot-starter-data-jpa 의존성 추가 필요
+  - 데이터베이스에 매핑시킬 객체의 애너테이션은 JPA 지원 애너테이션이므로 하이버네이트에서 다른 프레임워크로 변경되어도 코드 변경이 필요없음
+- DataSourceTransactionManager 대신 HibernateTransactionManager 사용
+- 필수 의존성 : SessionFactory / 필수는 아닌 default가 true인 의존성 : flush 후 Session clear 여부
+- 프레임워크가 많은 일을 수행해주어 스프링 배치의 구성은 매우 간단해짐
+
 ### JpaItemWriter
 
 ## 스프링 데이터의 ItemWriter
