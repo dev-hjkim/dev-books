@@ -80,6 +80,10 @@
 
 ## 스프링 데이터의 ItemWriter
 ### 몽고DB
+- MongoItemWriter를 통해 몽고DB 컬렉션에 객체를 문서로 저장할 수 있도록 지원
+- spring-boot-starter-data-mongodb 의존성 추가, 데이터베이스 관련 설정 application.yml 추가 필요
+- 몽고 DB가 ACID 트랜잭션을 지원하지 않아 다른 데이터 저장소처럼 커밋이 발생하기 직전까지 쓰기를 버퍼링하고 가장 마지막 순간에 쓰기 작업을 수행
+
 ### 네오4j
 ### 피보탈 젬파이어와 아파치 지오드
 ### 리포지터리
