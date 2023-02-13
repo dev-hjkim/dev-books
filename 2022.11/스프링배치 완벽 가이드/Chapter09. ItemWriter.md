@@ -81,10 +81,17 @@
 ## 스프링 데이터의 ItemWriter
 ### 몽고DB
 - MongoItemWriter를 통해 몽고DB 컬렉션에 객체를 문서로 저장할 수 있도록 지원
+  - 문자열 타입의 id(관계형 DB에서는 long이었음)
 - spring-boot-starter-data-mongodb 의존성 추가, 데이터베이스 관련 설정 application.yml 추가 필요
 - 몽고 DB가 ACID 트랜잭션을 지원하지 않아 다른 데이터 저장소처럼 커밋이 발생하기 직전까지 쓰기를 버퍼링하고 가장 마지막 순간에 쓰기 작업을 수행
 
 ### 네오4j
+- Neo4jItemWriter를 통해 데이터베이스에 레코드 저장
+  - UUID 형식의 id
+- @NodeEntity 애너테이션으로 해당 클래스가 그래프의 노드임을 ItemWriter에게 알려줌
+- @Relationship 애너테이션으로 노드 간의 관계 매핑
+- spring-boot-starter-data-neo4j 의존성 추가, 데이터베이스 관련 설정 application.yml 추가 필요
+
 ### 피보탈 젬파이어와 아파치 지오드
 ### 리포지터리
 
