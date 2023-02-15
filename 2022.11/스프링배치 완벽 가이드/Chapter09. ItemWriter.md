@@ -105,6 +105,10 @@
   - 외부 메커니즘 사용하는 대신 스프링으로 직접 구성 가능
 
 ### 리포지터리
+- 스프링 데이터의 Repository 추상화로 스프링 데이터가 지원하는 모든 데이터 저장소에 레코드 저장 가능
+- CrudRepository 상속하여 구현
+- RepositoryItemWriter를 통해 데이터 저장
+- @EnableJpaRepositories를 적용하여 리포지터리가 존재하는 패키지 내의 클래스 지정
 
 ## 그밖의 출력 방식을 위한 ItemWriter
 ### ItemWriterAdapter
