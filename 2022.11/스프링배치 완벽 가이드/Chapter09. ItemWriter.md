@@ -93,6 +93,17 @@
 - spring-boot-starter-data-neo4j 의존성 추가, 데이터베이스 관련 설정 application.yml 추가 필요
 
 ### 피보탈 젬파이어와 아파치 지오드
+- 밀리초 단위를 다루는 금융권에서 부정행위를 감지하려면 빠르게 처리가 이루어져야 함. 메모리에 데이터를 캐시 -> 피보탈 젬파이어의 탄생
+- 피보탈 젬파이어
+  - 오픈소스 버전은 아파치 지오드
+  - 인메모리 데이터 그리드, 고성능 분산 HashMap, 모든 데이터를 메모리에 보관
+- 스프링 배치와의 연관성 : 어플리케이션 시작 시 비어있는 캐시를 준비 상태로 만듬
+- GemfireItemWriter, GemfireTemplate과 Converter로 피보탈 젬파이어에 아이템 저장
+- spring-data-gemfire, spring-shell 의존성 추가
+  - 스프링 부트가 기본적으로 사용하는 로깅과 젬파이어가 기본적으로 사용하는 로깅 충돌 -> spring-boot-starter-batch에서 로깅 의존성 제외할 것
+- @PeerCacheApplication 애너테이션으로 애플리케이션 내에서 피보탈 젬파이어 서비스를 부트스트랩\
+  - 외부 메커니즘 사용하는 대신 스프링으로 직접 구성 가능
+
 ### 리포지터리
 
 ## 그밖의 출력 방식을 위한 ItemWriter
