@@ -112,6 +112,12 @@
 
 ## 그밖의 출력 방식을 위한 ItemWriter
 ### ItemWriterAdapter
+- 각각의 아이템 처리 시에 기존 서비스 메서드를 호출하는 작업을 반복
+  - ItemWriterAdapter가 호출하는 메서드는 현재 스텝에서 처리 중인 타입의 아규먼트 단 하나만 받아들여야 함
+- 두 가지 의존성 필요
+  - targetObject : 호출할 메서드를 가지고 있는 스프링 빈
+  - targetMethod : 아이템 처리 시 호출할 메서드
+
 ### PropertyExtractingDelegatingItemWriter
 ### JmsItemWriter
 ### SimpleMailMessageItemWriter
