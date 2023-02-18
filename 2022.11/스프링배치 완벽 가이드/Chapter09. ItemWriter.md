@@ -119,6 +119,10 @@
   - targetMethod : 아이템 처리 시 호출할 메서드
 
 ### PropertyExtractingDelegatingItemWriter
+- ItemWriterAdapter와 동일하게 스프링 서비스의 지정된 메서드 호출
+  - ItemWriterAdapter는 처리중인 아이템을 그대로 메서드의 아규먼트로 넘김
+  - PropertyExtractingDelegatingItemWriter는 요청한 아이템 중 특정 속성만 뽑아서 아규먼트로 넘기는 것이 가능
+
 ### JmsItemWriter
 ### SimpleMailMessageItemWriter
 
