@@ -131,6 +131,12 @@
   - JmsTemplate : 스프링 부트가 제공하는 ConnectionFactory는 JmsTemplate과 잘 동작하지 않으므로 CachingConnectionFactory를 활용해 구성해야 함
 
 ### SimpleMailMessageItemWriter
+- 신규 고객 각각에게 환영 이메일을 보내거나 스팸 메일을 보내고 싶을 때 사용 가능
+- SimpleMailMessageItemWriter
+  - ItemWriter의 단일 write 메서드 구현
+  - 단, 이메일을 보내기 위해 필요한 정보인 제목, 받는 사람 이메일 주소, 보낸 사람 이메일 주소를 포함한 SimpleMailMessage를 확장한 객체의 목록을 아이템으로 취함
+  - ItemReader에서부터 SimpleMailMessage를 상속한 아이템을 다루어야 한다는 것을 의미하는 것은 아님. ItemProcessor에서 SimpleMailMessage를 상속한 객체를 반환케 하면 됨
+  - MailSender라는 한 가지 의존성만 필요
 
 ## 여러 자원을 사용하는 ItemWriter
 ### MultiResourceItemWriter
