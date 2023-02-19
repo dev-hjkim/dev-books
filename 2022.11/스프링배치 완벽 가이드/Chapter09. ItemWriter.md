@@ -124,6 +124,12 @@
   - PropertyExtractingDelegatingItemWriter는 요청한 아이템 중 특정 속성만 뽑아서 아규먼트로 넘기는 것이 가능
 
 ### JmsItemWriter
+- 둘 이상의 엔드포인트 간 통신하는 메시지 지향적 방식 JMS(Java Messaging Service)
+- JmsItemWriter를 통해 JMS 큐에 메시지를 넣음
+  - JMS 브로커로는 인메모리 방식으로 간단히 사용할 수 있는 아파치 액티브 MQ 사용 가능
+  - MessageConverter :  메시지를 JSON으로 변환
+  - JmsTemplate : 스프링 부트가 제공하는 ConnectionFactory는 JmsTemplate과 잘 동작하지 않으므로 CachingConnectionFactory를 활용해 구성해야 함
+
 ### SimpleMailMessageItemWriter
 
 ## 여러 자원을 사용하는 ItemWriter
