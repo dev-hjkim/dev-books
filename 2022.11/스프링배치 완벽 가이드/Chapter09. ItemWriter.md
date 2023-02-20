@@ -140,6 +140,13 @@
 
 ## 여러 자원을 사용하는 ItemWriter
 ### MultiResourceItemWriter
+- 처리한 레코드 수에 따라 출력 리소스를 동적으로 만듬
+- write 메서드 호출 -> 리소스가 생성된 채 열려있는지 확인 -> 아이템을 위임 ItemWriter에 전달 -> 파일에 기록한 아이템 수가 임곗값에 도달했는지 확인 -> 도달했을 경우 파일 닫기
+  - 청크 중간에 새 리소스를 생성하지 않음에 유의
+- 리소스, delegateItemWriter, 쓰기 작업을 수행할 아이템 수 3가지의 의존성 필요
+  - ResourceSuffixCreator를 통해 접미사 지정 가능
+- delegateItemWriter는 출력 파일에 대한 직접적인 참조 없이 필요할 경우 multiResourceItemWriter로부터 제공받음
+
 #### 헤더와 푸터 XML 프래그먼트
 #### 플랫 파일 내의 헤더와 푸터
 ### CompositeItemWriter
