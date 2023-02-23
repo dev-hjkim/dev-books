@@ -148,7 +148,18 @@
 - delegateItemWriter는 출력 파일에 대한 직접적인 참조 없이 필요할 경우 multiResourceItemWriter로부터 제공받음
 
 #### 헤더와 푸터 XML 프래그먼트
+- XML 파일
+  - 파일의 맨 위 또는 맨 아래에 XML 세그먼트 추가
+  - StaxWriterCallback 인터페이스로 구현
+
 #### 플랫 파일 내의 헤더와 푸터
+- 플랫 파일
+  - 파일의 상단 또는 하단에 하나 이상의 레코드 추가
+  - 헤더 : FlatFileHeaderCallback 인터페이스로 구현
+  - 푸터 : FlatFileFooterCallback 인터페이스로 구현
+    - 파일에 쓰기 작업을 수행한 아이템 수를 계산하기 위해 Aspect의 pointcut 확인
+      ItemWriterListener.beforeWrite -> Aspect 구현 -> FlatFileItemWriter.open -> Aspect 구현 -> FlatFileItemWriter.write
+
 ### CompositeItemWriter
 ### ClassifierCompositeItemWriter
 #### ItemStream 인터페이스
