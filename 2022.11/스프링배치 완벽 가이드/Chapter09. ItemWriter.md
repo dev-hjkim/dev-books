@@ -161,5 +161,12 @@
       ItemWriterListener.beforeWrite -> Aspect 구현 -> FlatFileItemWriter.open -> Aspect 구현 -> FlatFileItemWriter.write
 
 ### CompositeItemWriter
+- CompositeItemWriter를 사용하여 여러 장소에 쓰기 작업 가능
+  - (이전까지의 예제는 item 처리 시 하나의 장소에 쓰기 작업을 하는 예제)
+- 읽기 작업과 처리 작업은 하나의 아이템 당 한 번씩 발생, 쓰기 작업은 chunk 단위로 ItemWriter 구성 순서대로 발생
+  - XMLWriter, JDBCWriter 순으로 구성하였다면 읽기 -> 처리 -> 읽기 -> 처리 -> ... -> 청크 사이즈 도달 -> XML 쓰기 -> JDBC 쓰기의 과정을 청크마다 반복
+  - XMLWriter는 제대로 쓰기 성공, JDBCWriter 쓰기 실패 -> XMLWriter, JDBCWriter 둘 다 해당 chunk 전체 rollback
+  - 10개의 아이템을 XML, JDBC에 각각 썼을 때 JobRepository에 남는 쓰기작업 처리 수는 20이 아니라 10, 아이템 수를 기준으로 기록됨
+
 ### ClassifierCompositeItemWriter
 #### ItemStream 인터페이스
