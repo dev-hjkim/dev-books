@@ -169,4 +169,16 @@
   - 10개의 아이템을 XML, JDBC에 각각 썼을 때 JobRepository에 남는 쓰기작업 처리 수는 20이 아니라 10, 아이템 수를 기준으로 기록됨
 
 ### ClassifierCompositeItemWriter
+- 서로 다른 유형의 아이템을 확인하고 어떤 ItemWriter를 사용해 쓰기 작업을 수행할지 판별 후 적절한 writer에 아이템 전달
+- 모든 ItemWriter로 모든 아이템을 쓰는 CompositeItemWriter와 차이 존재
+  - A~M으로 시작하는 주에 거주하는 고객은 플랫 파일에 기록, N~Z로 시작하는 주에 거주하는 고객은 데이터베이스에 저장하도록 지정하는 것이 가능해짐
+- ClassifierCompositeItemWriter
+  - Classifier 구현체 필요
+    - classify 단일 메서드로 구성됨 -> 해당 메서드 구현을 통해 어느 곳에 쓰기 작업을 진행할지 판별
+
 #### ItemStream 인터페이스
+- open, update, close 세 가지 메서드로 구성
+- CompositeItemWriter는 ItemStream 인터페이스를 구현하여 위임 ItemWriter들의 open, update, close 메서드 반복적 호출 가능
+- ClassifierCompositeItemWriter는 ItemStream 인터페이스 구현하지 않음
+  - open 메서드가 호출되지 않은 상태에서 XMLEventFactory가 생성되거나 XML 쓰기가 시도되어 Exception 발생
+  - 스텝 내에서 수동으로 ItemStream을 등록해야 함
