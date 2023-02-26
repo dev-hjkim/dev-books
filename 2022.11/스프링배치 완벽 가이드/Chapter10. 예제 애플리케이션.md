@@ -19,6 +19,8 @@
     - PatternMatchingCompositeLineTokenizer
 
 ### 고겍 ID 유효성 검증하기
+- Validator 구현체를 전달하여 ItemProcessor 구성
+
 ### 고객 정보 갱신
 ## 거래 정보 가져오기
 ### 거래 정보 읽어오기
