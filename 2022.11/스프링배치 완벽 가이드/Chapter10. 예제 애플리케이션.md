@@ -14,6 +14,10 @@
 - main 메서드를 지닌 class에 @EnableBatchProcessing 애너테이션 추가
 
 ## 갱신할 고객 정보 가져오기
+- 레코드 유형 1, 2, 3에 따라 데이터베이스에 저장된 고객정보를 업데이트
+    - 각 유형에 따른 LineTokenizer 적용
+    - PatternMatchingCompositeLineTokenizer
+
 ### 고겍 ID 유효성 검증하기
 ### 고객 정보 갱신
 ## 거래 정보 가져오기
