@@ -22,6 +22,9 @@
 - Validator 구현체를 전달하여 ItemProcessor 구성
 
 ### 고객 정보 갱신
+- 세 개의 서로 다른 ItemWriter 구현체에게 처리를 위임할 수 있게 해주는 ClassifierCompositeItemWriter 사용
+  - 적절한 ItemWriter를 반환해주는 Classifier 구현 필요
+
 ## 거래 정보 가져오기
 ### 거래 정보 읽어오기
 ### 거래 정보 기록하기
