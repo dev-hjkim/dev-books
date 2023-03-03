@@ -26,8 +26,17 @@
   - 적절한 ItemWriter를 반환해주는 Classifier 구현 필요
 
 ## 거래 정보 가져오기
+- xml 데이터 파일을 Transaction 도메인 객체에 매핑
+  - @XmlRootElement
+  - @XmlJavaTypeAdapter
+    - 형변환을 위해 XmlAdapter를 상속받은 JaxbDateSerializer 구현 필요
+
 ### 거래 정보 읽어오기
+- Xml 파일을 읽을 것이므로 StaxEventItemReader 사용
+
 ### 거래 정보 기록하기
+- 읽어들인 아이템을 DB에 저장하는 역할을 수행하므로 JdbcBatchItemWriter 사용
+
 ## 잔액에 거래 내역 적용하기
 ### 거래 데이터 읽어오기
 ### 계좌 잔액 갱신하기
