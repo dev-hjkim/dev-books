@@ -38,8 +38,14 @@
 - 읽어들인 아이템을 DB에 저장하는 역할을 수행하므로 JdbcBatchItemWriter 사용
 
 ## 잔액에 거래 내역 적용하기
+- DB에서 읽어들인 정보를 사용하여 DB 업데이트를 진행
+
 ### 거래 데이터 읽어오기
+- JdbcCursorItemReader 사용, 람다식으로 RowMapper 구현체 구현
+
 ### 계좌 잔액 갱신하기
+- db의 데이터를 갱신하는 행위이므로 JdbcBatchItemWriter 사용
+
 ## 월별 거래명세서 생성하기
 ### 거래명세서 데이터 가져오기
 ### Statement 객체에 계좌 정보 추가하기
