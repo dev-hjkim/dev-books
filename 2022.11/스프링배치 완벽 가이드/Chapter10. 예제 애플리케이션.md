@@ -61,3 +61,7 @@
   - 하나의 계좌에 여러 거래가 포함되어 있는 부모-자식 관계를 가진 경우, 단일 행을 객체에 매핑하는 RowMapper가 아니라 ResultSetExtractor를 사용
 
 ### 거래명세서 생성하기
+- MultiResourceItemWriter
+  - FlatFileItemWriter에게 쓰기작업 위임
+    - 계좌 정보 출력을 위한 LineAggregator 구현체 구현
+    - 각 거래명세서의 일반적인 항목을 제공하는 FlatFileHeaderCallback 구현체 구현
