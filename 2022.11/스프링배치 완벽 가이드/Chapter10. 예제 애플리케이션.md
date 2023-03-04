@@ -57,4 +57,7 @@
 - JdbcCursorItemReader 사용
 
 ### Statement 객체에 계좌 정보 추가하기
+- ResultSetExtractor 구현체를 구현
+  - 하나의 계좌에 여러 거래가 포함되어 있는 부모-자식 관계를 가진 경우, 단일 행을 객체에 매핑하는 RowMapper가 아니라 ResultSetExtractor를 사용
+
 ### 거래명세서 생성하기
