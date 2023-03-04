@@ -47,6 +47,14 @@
 - db의 데이터를 갱신하는 행위이므로 JdbcBatchItemWriter 사용
 
 ## 월별 거래명세서 생성하기
+- chunk의 사이즈가 1
+  - 청크당 하나의 파일(거래명세서)을 만들어야 하기 때문 = 고객 당 거래명세서 1개
+- ItemWriter는 MultiResourceItemWriter를 사용
+
 ### 거래명세서 데이터 가져오기
+- 드라이빙 쿼리 패턴을 사용
+  - ItemReader에서 고객 데이터를 읽고 ItemProcessor에서 각 고객의 계좌들에 대한 데이터를 채워넣는 식
+- JdbcCursorItemReader 사용
+
 ### Statement 객체에 계좌 정보 추가하기
 ### 거래명세서 생성하기
