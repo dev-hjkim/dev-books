@@ -32,8 +32,23 @@
   - 입력 메커니즘이 이미 네트워크, 디스크 버스 등과 같은 자원을 소모하고 있는 경우 성능이 크게 나아지지 않을 수 있음
 
 ### 병렬 스텝
+- 파일에서 데이터를 읽어오는 작업 진행 시 한 파일을 읽는 일이 끝나지 않았다고 해서 다른 파일을 읽는 일을 미룰 필요까진 없을 때 병렬스텝 구현
+
 ### 병렬 스텝 구성하기
+- FlowBuilder의 split 메서드 사용
+  - TaskExecutor를 통해 스텝의 플로우를 각각의 스레드에서 병렬로 실행
+  - 병렬로 수행되도록 구성된 여러 플로우가 모두 완료된 이후에 step 실행
+
 ### AsyncItemProcessor와 AsyncItemWriter
+- 병목 구간이 ItemProcessor에 존재하는 경우, 새 스레드에서 스텝의 ItemProcessor 부분만 실행하게 하는 방식
+- AsyncItemProcessor와 AsyncItemWriter 사용
+  - AsyncItemProcessor : ItemProcessor 래핑, AsyncItemProcessor가 새 스레드에서 위임자인 ItemProcessor 실행시킴
+    - Future 반환
+  - AsyncItemWriter : ItemWriter 래핑, Futre를 처리해 위임 ItemWriter에게 결과 전달
+  - 반드시 함께 사용 필요
+- 스텝 구성 시 AsyncItemProcessor와 AsyncItemWriter를 사용하도록 구성
+  - dhunk 설정 시 <domain 객체, Future<domain객체>> chunk(chunk 사이즈) 로 설정해야 함
+
 ### 파티셔닝
 #### TaskExecutorPartitionHandler
 #### MessageChannelPartitionHandler
