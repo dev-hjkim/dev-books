@@ -50,7 +50,46 @@
   - dhunk 설정 시 <domain 객체, Future<domain객체>> chunk(chunk 사이즈) 로 설정해야 함
 
 ### 파티셔닝
+- 마스터 스텝이 처리할 일을 여러 워커 스텝으로 넘기는 개념
+  - 각 워커는 자체적으로 읽기(ItemReader), 처리(ItemProcessor), 쓰기(ItemWriter) 등을 담당하여 병렬로 처리
+- 두 가지 주요 추상화를 이해해야 제대로 사용 가능
+  1. Partitioner 인터페이스
+     1. 파티셔닝할 데이터를 여러 파티션으로 나누는 역할을 담당
+     2. 스프링 배치에서는 기본적으로 단 하나의 Partitioner 구현체인 MultiResourcePartitioner   
+     (여러 리소스 배열을 확인하여 리소스당 파티션을 만듬)
+     3. partition(int gridSize) 단일 메서드로 구성됨
+        - gridSize : 가장 효율적으로 데이터를 분할할 수 있는 워커 개수 지정(자동으로 지정해주지 않음)
+        - Map<String, ExecutionContext> 반환
+          1. 키는 파티션의 이름으로 고유해야 함
+          2. ExecutionContext는 처리할 대상을 식별하는 파티션 메타데이터
+  2. PartitionHandler 인터페이스
+     1. 워커와 의사소통(작업대상을 어떻게 알려줄지 / 작업이 완료된 시점을 어떻게 식별할지) 하는 데 사용되는 인터페이스
+     2. 대부분의 경우 Partitioner 구현체는 구현하더라도 PartitionHandler는 직접 작성하지 않음
+     3. 스프링 포트폴리오는 세 가지 PartitionerHandler 구현체를 제공
+        1. TaskExecutorPartitionHandler
+           - 스프링 배치가 제공
+           - 단일 JVM 내에서 파티셔닝 개념 사용, 동일 JVM 내의 여러 스레드에서 워커 실행
+        2. MessageChannelPartitionHandler
+           - 스프링 배치가 제공
+           - 원격에서 처리 가능하도록 원격 JVM에 메타데이터 전송(spring integration 사용)
+        3. DeployerPartitionHandler
+           - 스프링 클라우드 태스크 프로젝트가 제공
+           - 스프링 클라우드 디플로이어 구현체에 위임하여 워커 실행
+           - 워커가 실시간으로 동적 확장되어 시작, 파티션 실행, 종료 수행
+- 주의할 점
+  - 마스터와 모든 워커 스텝이 모두 동일한 JobRepository 데이터베이스와 통신하도록 구성되어야 함
+  - MessageChannelPartitionHandler를 사용할 시, 원격 JVM과 통신이 가능해야 함
+
 #### TaskExecutorPartitionHandler
+- 단일 JVM 내에서 여러 스레드를 사용해 워커를 실행할 수 있게 해주는 컴포넌트
+- 잡 파라미터 대신 스텝의 ExecutionContext에서 파일 위치 혹은 실행에 필요한 데이터를 얻도록 구성
+- 잡 구성 시에는 Partitioner 구현체와 PartitionHandler 구현체를 사용하여 파티션 스텝을 정의하고 해당 스텝으로 잡을 구성
+- TaskExecutorPartitionHandler는 실행하려는 스텝, TaskExecutor 설정 필요
+  - TaskExecutor 설정하지 않을 시 기본적으로 SyncTaskExecutor 사용됨
+  - 기본값이 선택될 경우 비동기 처리도 불가하고 스레드 생성 개수를 제한하지도 않아 위험. 따라서 반드시 다중 스레드를 사용할 수 있도록 TaskExecutor 설정 필요
+- BATCH_STEP_EXECUTION 테이블에 파티션 스텝과 관련된 레코드 + 각 파티션마다의 레코드가 하나씩 추가되어 있음
+  - 예시 : step1 레코드 + step1:partition1 & step1:partition2 & step1:partition0 레코드
+
 #### MessageChannelPartitionHandler
 #### DeployerPartitionHandler
 ### 원격 청킹
