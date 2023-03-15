@@ -91,5 +91,12 @@
   - 예시 : step1 레코드 + step1:partition1 & step1:partition2 & step1:partition0 레코드
 
 #### MessageChannelPartitionHandler
+- 외부 JVM과 통신하는 데 스프링 인티그레이션의 MessageChannel 추상화를 사용
+- 마스터 스텝은 메시지로 워커와 통신, 각 워커는 큐에서 메시지를 청취하는 리스너를 갖고 있으며 마스터로부터 요청이 들어왔을 때 스텝 실행 후 결과 반환
+- 주의할 점
+  - 각 JVM이 동일한 JobRepository를 바라보도록 구성 필요(그렇지 않을 경우 잡 재시작 불가)
+  - Step이 Job 컨텍스트 외부에서 실행되므로 JobExecution 또는 JobExecutionContext의 정보를 워커 스텝으로 전달 불가
+- RemotePartitioningMasterStepBuilderFactory로 원격 마스터 파티션 스텝을 만듬
+- 
 #### DeployerPartitionHandler
 ### 원격 청킹
