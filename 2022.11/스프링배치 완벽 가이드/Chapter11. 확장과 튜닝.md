@@ -96,7 +96,21 @@
 - 주의할 점
   - 각 JVM이 동일한 JobRepository를 바라보도록 구성 필요(그렇지 않을 경우 잡 재시작 불가)
   - Step이 Job 컨텍스트 외부에서 실행되므로 JobExecution 또는 JobExecutionContext의 정보를 워커 스텝으로 전달 불가
-- RemotePartitioningMasterStepBuilderFactory로 원격 마스터 파티션 스텝을 만듬
-- 
+- MasterConfiguration과 WorkerConfiguration 별도 구성 필요
+  - MasterConfiguration : Job 구성 / WorkerConfiguration : 스텝이 사용하는 리더, 라이터 구성
+- MasterConfiguration
+  - RemotePartitioningMasterStepBuilderFactory로 원격 마스터 파티션 스텝을 만듬
+  - outbound flow 구성 : 요청 채널에 메시지가 들어올 시 핸들러는 AMQP 아웃바운드 어댑터로써, 메시지를 래빗 MQ 큐로 보냄
+  - inbound flow 구성
+    1. 각 워커가 회신한 메시지를 마스터가 수신하면 이를 집계하여 결과를 평가, 스텝 성공여부 결정
+       - 래빗MQ의 응답큐에서 메시지를 수신하면 해당 메시지를 가져와 응답 채널에 넣음
+    2. JobRepository를 폴링하여 StepExecution의 상태를 확인, 모두 완료된 것으로 저장되면 성공한 것으로 평가
+- WorkerConfiguration
+  - RemotePartitioningWorkerStepBuilderFactory로 원격 파티션 스텝의 워커 측에 필요한 컴포넌트 구성 가능
+    - StepExecutionRequestHandler 구성 : 마스터 스텝으로부터 메시지를 수신해 원격 JVM에서 실행하는 역할
+  - inboundChannel, outboundChannel, chunk size, reader, writer 으로 WorkerStep 구성
+- 래빗 MQ 가 실행 중인지 확인한 후 세 개의 워커 JVM에서는 ``--spring.profiles.active=worker`` 명령어로 애플리케이션 실행
+- 하나의 JVM에서는 ``--spring.profiles.active=master`` 명령어로 어플리케이션 실행, master가 실행되어야 worker도 동작하기 시작함
+
 #### DeployerPartitionHandler
 ### 원격 청킹
