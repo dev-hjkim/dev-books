@@ -113,4 +113,27 @@
 - 하나의 JVM에서는 ``--spring.profiles.active=master`` 명령어로 어플리케이션 실행, master가 실행되어야 worker도 동작하기 시작함
 
 #### DeployerPartitionHandler
+- TaskLauncher라는 또 다른 추상화를 통해 "필요에 따라" 워커 실행
+- 마스터 / 워커 프로파일에 해당하는 각각의 handler bean 필요
+  - 마스터 프로파일
+    - DeployerPartitionHandler : 도커 이미지를 만들어 도커 레지스트리에 게시한 후  
+    DeployerPartitionHandler가 이미지를 다운로드 하여 쿠버네티스 클러스터에 자동으로 푸시
+    - 워커가 기동되면 TaskLauncher에 역할을 위임하여 실행할 명령 생성
+      - 로컬, 클라우드 파운드리, 쿠버네티스 세 가지 옵션에 특화된 옵션 제공
+    - JobExplorer를 통해 워커가 완료되었는지 JobRepository를 폴링하여 확인
+    - CommandLineArgsProvider 추상화
+      - 명령행 인수를 사용자가 직접 정의할 수 있도록 해주는 전략 인터페이스
+      - ``--spring.profiles.active=worker``, ``--spring.cloud.task.initialize.enable=false``
+    - EnvironmentVariableProvider 추상화
+      - 워커 애플리케이션이 실행되는 셸 내의 환경변수를 설정하는 데 사용되는 전략 인터페이스
+    - 한 번에 실행시킬 수 있는 최대 워커 개수 지정을 하지 않을 경우 파티션 당 하나의 워커를 기동
+      - 최대 워커 개수를 3, 파티션 개수가 100일 경우 최초에 워커 3개 기동한 뒤 남은 파티션을 다 처리할 때까지 워커의 개수를 3개로 유지하며 처리
+  - 워커 프로파일
+    - DeployerStepExecutionHandler
+      - 환경 정보에서 사전에 정의된 프로퍼티를 통해 JobExecution ID, StepExecution ID, 스텝 이름의 값을 가져온 뒤  
+      StepExecutionRequestHandler처럼 스텝 실행
+  - 래빗 MQ가 기동중인지 확인할 필요도 없고 마스터와 워커를 각각의 JVM에서 실행시켜 주지 않아도 됨  
+    (마스터만 실행하면 마스터에서 알아서 워커들을 생성하여 작업)
+  - jps 명령어로 JVM 실행 모니터링 가능, 실행 중인 모든 자바 가상머신 목록 볼 수 있음
+
 ### 원격 청킹
