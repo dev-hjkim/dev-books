@@ -137,3 +137,15 @@
   - jps 명령어로 JVM 실행 모니터링 가능, 실행 중인 모든 자바 가상머신 목록 볼 수 있음
 
 ### 원격 청킹
+- 처리할 실제 데이터가 네트워크를 통해 전송되고 마스터가 이를 읽음 -> 워커에게 보내 처리 -> 워커는 처리 후 산출물 생성
+  - 입력이나 출력에 병목이 있을 경우 원격 청킹은 오히려 성능을 저하시킴(병렬처리가 더 나음). 처리에 병목에 있는 상황에 유용
+  - 보장된 전송 필요. 누가 무엇을 처리하고 있는지에 대한 정보를 유지하지 않으므로 지속적인 통신 형태가 필요
+- ItemProcessor를 가로채 ChunkHandler 구현체의 인스턴스를 주입
+  - ChunkHandler :  자신이 직접 작업을 수행하는 대신 원격으로 처리할 아이템을 전송하고 응답 수신, handleChunk 단일 메서드 가짐
+- RemoteChunkingMasterStepBuilderFactory : 원격 청크 스텝을 위한 마스터 스텝을 생성하는 빌더
+  - ItemProcessor와 ItemWriter는 전부 워커 스텝 측에 구성됨
+  - 마스터 스텝에는 ItemReader와 입력채널, 출력채널이 구성됨
+- RemoteChunkingWorkerBuilder : 팩토리 필요 없이 그 빌더 자체를 주입받는다는 특징 존재
+  - 마스터에서는 inbound integration flow / outbound integration flow 존재하지만 워커에서는 3가지의 integration flow 존재
+  - inbound / outbound integration flow와 수신되는 요청을 받아들여 배치 처리를 다루는 서비스에 해당 요청을 전달하고 결과를 반환하는 체인을 생성하는 flow로 구성
+- 원격 파티셔닝 예제와 동일하게 래빗 MQ 실행 -> 각각의 JVM에 워커 프로파일로 띄우기 -> 마스터 프로파일로 띄우기 -> 실행 결과 확인
