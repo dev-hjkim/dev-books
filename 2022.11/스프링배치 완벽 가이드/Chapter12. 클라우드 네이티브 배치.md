@@ -63,6 +63,16 @@
 - 데이터 마이그레이션과 같은 관리 작업, 일회성 작업으로 실행되어야 함
 
 ## 간단한 배치 잡
+- 스프링 배치 애플리케이션을 스프링의 기능을 사용하여 클라우드 네이티브 애플리케이션으로 발전시키는 예제
+- JobExecutionListener 구현체 : beforeJob 메서드 구현을 통해 잡 시작 전 실행
+  - S3 버킷에 있는 모든 리소스 목록을 가져와 다운로드하여 파일로 저장
+- MultiResourceItemReader, EnrichmentItemProcessor, JdbcBatchItemWriter로 스텝 구성
+  - MultiResourceItemReader : 디렉터리 내에 존재하는 모든 파일을 읽어들임
+  - EnrichmentItemProcessor : REST API로 단순한 GET 요청 실행하여 아이템 객체에 정보 저장
+  - JdbcBatchItemWriter : 아이템 객체 jdbc 정의해둔 DB에 저장
+- ``spring.cloud.aws.region.auto`` 옵션이 true일 경우, 애플리케이션이 US 리전에서 실행되면 S3 리전도 동일하게 설정됨
+  - 책의 예제에서는 애플리케이션을 AWS에서 실행하지 않으므로 S3만 US 리전에 띄우고자 false 값으로 설정
+
 ## 서킷 브레이커
 ## 구성 외부화
 ### 스프링 클라우드 컨피그
