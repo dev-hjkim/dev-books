@@ -73,12 +73,26 @@
 스프링 배치 특화 컴포넌트(스텝, 잡에 의존적인 컴포넌트들 등등)의 테스트 방법에 대해 설명
 
 #### 잡과 스텝 스코프 빈 테스트하기
-- 잡과 스텝 스코프를 사용하는 컴포넌트의 테스트를 스텝 스코프 바깥에서 진행하려 할 때 의존성 문제 해결하는 2가지 방법
+- 잡과 스텝 스코프를 사용하는 컴포넌트의 테스트를 스텝 스코프 바깥에서 진행하려 할 때 의존성 문제 해결하기
   - TestExecutionListener 사용
     - 테스트 메서드 실행 전후에 수행되어야 하는 일을 정의하는 스프링 API
     - 스프링 배치에서는 TestExecutionListener 구현체인 JobScopeTestExecutionListener, StepScopeTestExecutionListener 제공
     - StepScopeTestExecutionListener
       - 테스트 케이스에서 팩토리 메서드를 사용하여 StepExecution을 가져오고 반환된 컨텍스트를 현재 메서드의 컨텍스트로 사용 가능
       - 각 테스트 메서드가 실행되는 동안 stepContext를 제공
+- @SpringBatchTest
+    - ApplicationContext에 자동으로 테스트할 수 있는 많은 유틸리티 제공
+    - 대표적 4가지의 bean
+      - 잡이나 스텝을 실행하는 JobLauncherTestUtils 인스턴스
+      - JobRepository에서 JobExecutions를 생성하는 데 사용하는 JobRepositoryTestUtils
+      - 스텝 스코프와 잡 스코프 빈을 테스트할 수 있는 StepScopeTestExecutionListener & JobScopeTestExecutionListener
+- StepScopeTestExecutionListener를 사용해 스텝 스코프 의존성을 처리하는 방법
+  1. getStepExecution 메서드 작성 필요
+    - 책의 예제에서는 step scope로 JobParameter의 값을 주입받고 있는 중이라 메서드 내에서 우선 JobParameters 객체부터 생성
+    - MetaDataInstanceFactory로 StepExecution을 생성, 생성자에 jobParameters 전달
+      - MetaDataInstanceFactory : JobExecution, StepExecution 인스턴스를 생성하는 유틸리티 클래스
+      - 생성한 Execution 인스턴스들이 JobRepository에 저장되지 않음(JobRepositoryTestUtils와 다른점)
+  2. 테스트의 stepExecution을 생성하였으므로 ItemReader, ItemWriter 등을 주입받아 테스트 진행
+
 #### 스텝 테스트하기
 #### 잡 테스트하기
