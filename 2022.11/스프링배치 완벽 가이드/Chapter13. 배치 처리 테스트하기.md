@@ -95,4 +95,18 @@
   2. 테스트의 stepExecution을 생성하였으므로 ItemReader, ItemWriter 등을 주입받아 테스트 진행
 
 #### 스텝 테스트하기
+- 스텝의 실행을 테스트, 스텝 실행 후 그 결과를 보고 정확하게 실행되었는지 유효성 검증
+- JobLauncherTestUtils와 DataSource를 자동와이어링하여 테스트
+  - ```jobLauncherTestUtils.launchStep("{스텝이름}", jobParameters);```
+    - 스텝 이름에 해당하는 빈을 찾고 잡 파라미터를 제공해 실행
+  - JdbcTemplate으로 쿼리를 실행하여 Map에 매핑한 후 각 값이 예상한 값과 같은지 확인
+
 #### 잡 테스트하기
+- 스텝 테스트와 동일, JobLauncherTestUtils 사용
+- 일부 잡은 매우 복잡할 수 있어 초기 구성이 쉽지 않을수도 있음
+- ```JobExecution jobExecution = jobLauncherTestUtils.launchJob();```
+  - 테스트 케이스 내부의 정적 클래스 내에 정의할 경우 컨텍스트에 하나의 잡만 존재하므로 사용할 잡 지정 필요없이 자동 와이어링됨
+  - BarchStatus가 완료인지 검증할 수 있는 JobExecution 반환
+  - StepExecution도 검사 가능하여 기록한 아이템 개수의 유효성 검증도 가능
+    - ```StepExecution stepExecution = jobExecution.getStepExecutions().iterator().next();```
+    - ```assertEquals(3, stepExecution.getReadCount());```
